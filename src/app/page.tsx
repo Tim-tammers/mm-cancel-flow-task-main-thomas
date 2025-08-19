@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import CancelModal from './cancelmodal';
 import WarningIcon from '@/assets/warningicon';
+import Caret from '@/assets/caret';
 
 // Mock user data for UI display
 const mockUser = {
@@ -213,14 +214,7 @@ export default function ProfilePage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
               <span className="text-sm font-medium">Manage Subscription</span>
-              <svg 
-                className={`w-4 h-4 ml-2 transition-transform duration-200 ${showAdvancedSettings ? 'rotate-180' : ''}`}
-                fill="none" 
-                viewBox="0 0 24 24" 
-                stroke="currentColor"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
+              <Caret className={`w-4 h-4 ml-2 transition-transform duration-200 ${showAdvancedSettings ? 'rotate-180' : ''}`}/>
             </button>
 
             {/* Collapsible Settings Content */}
