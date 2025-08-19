@@ -66,3 +66,12 @@ INSERT INTO subscriptions (user_id, monthly_price, status) VALUES
   ('550e8400-e29b-41d4-a716-446655440002', 2900, 'active'), -- $29.00
   ('550e8400-e29b-41d4-a716-446655440003', 2500, 'active')  -- $25.00
 ON CONFLICT DO NOTHING; 
+
+
+--Add a JSONB column to cancellations that accounts for the various user responses in the flow. 
+ALTER TABLE cancellations
+ADD COLUMN responses JSONB;
+
+--Add a column in the table for those with and without jobs. 
+ALTER TABLE cancellations
+ADD COLUMN found_job BOOL;
