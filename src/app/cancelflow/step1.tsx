@@ -1,11 +1,12 @@
 import React from "react";
-
+import { Cancellation } from "@/lib/cancellation_model";
+import { truncate } from "fs/promises";
 interface StepOneProps {
   nextStep: () => void;
-  setGotJob: (value: boolean) => void;
+  setJobFound: (value: boolean) => void; 
 }
 
-const JobQuestion: React.FC<StepOneProps> = ({ nextStep, setGotJob }) => {
+const JobQuestion: React.FC<StepOneProps> = ({ nextStep,  setJobFound }) => {
   return (
     <div className="space-y-2.5">
       <h2 className="text-gray-800">Hey mate, Quick one before you go.</h2>
@@ -16,7 +17,7 @@ const JobQuestion: React.FC<StepOneProps> = ({ nextStep, setGotJob }) => {
 
       <button
         onClick={() => {
-          setGotJob(true);
+          setJobFound(true);
           nextStep();
         }}
         className="inline-flex items-center justify-center w-full px-4 py-3 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-green-50 hover:border-gray-400 transition-all duration-200 shadow-sm group"
@@ -26,10 +27,10 @@ const JobQuestion: React.FC<StepOneProps> = ({ nextStep, setGotJob }) => {
 
       <button
         onClick={() => {
-          setGotJob(false);
+          setJobFound(false);
           nextStep();
         }}
-        className="inline-flex items-center justify-center w-full px-4 py-3 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-purple-50 hover:border-gray-400 transition-all duration-200 shadow-sm group"
+        className="inline-flex items-center justify-center w-full px-4 py-3 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-[#EBE1FE] hover:border-gray-400 transition-all duration-200 shadow-sm group"
       >
         Not yet - I'm still looking
       </button>

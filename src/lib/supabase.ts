@@ -24,3 +24,17 @@ export const supabaseAdmin = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 ) 
 
+
+//CSPRNG num generator for cancellation
+export function getABVariant(): "A" | "B" {
+  // Create a Uint8Array with 1 byte
+  const array = new Uint8Array(1);
+
+  // Fill it with a cryptographically secure random number
+  crypto.getRandomValues(array);
+
+  // Map to 0 or 1
+  const randomBit = array[0] % 2;
+
+  return randomBit === 0 ? "A" : "B";
+}
