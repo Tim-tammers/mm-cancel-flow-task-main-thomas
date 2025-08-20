@@ -9,8 +9,18 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
+
+export function authClient(token: string){
+const client = createClient(supabaseUrl, supabaseAnonKey, {
+    global: { headers: { Authorization: `Bearer ${token}` } }
+  });
+
+  return client;
+} 
+
 // Server-side client with service role key for admin operations
 export const supabaseAdmin = createClient(
   supabaseUrl,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 ) 
+

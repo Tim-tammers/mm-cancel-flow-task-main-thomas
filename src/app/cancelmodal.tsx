@@ -7,13 +7,55 @@ import { useState } from "react";
 import Step1Props from "./cancelflow/step1"
 import Step2Job from "./cancelflow/step2job"
 import Step3Job from "./cancelflow/step3job"
+
+
 interface CancelModalProps {
     isOpen: boolean;
     onClose: () => void;
 }
+let userToken: string | null = null;
 
 
+async function loginUser(email: string) {
+  const res = await fetch('/api/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email }),
+  })
 
+  const data = await res.json()
+  console.log('Data', data)
+  userToken = data.session?.session.access_token || null;
+  return data.session
+}
+
+async function getUserSubscription() {
+  const res = await fetch('/api/getsubscriptions', {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${userToken}`,
+    },
+  })
+
+  if (!res.ok) throw new Error('Failed to fetch subscriptions')
+
+  const data = await res.json()
+  console.log('subscription:', data)
+  return data.subscription
+}
+
+async function loginAndFetchSubscription(email: string) {
+  // Wait for login to finish and token to be set
+  const session = await loginUser(email);
+
+  if (!userToken) {
+    throw new Error('Login failed, no token available');
+  }
+
+  // Now call getUserSubscription safely
+  const subscription = await getUserSubscription();
+  return subscription;
+}
 export default function CancelModal({ isOpen, onClose }: CancelModalProps) {
     const [step, setStep] = useState(0);
 
@@ -31,6 +73,8 @@ export default function CancelModal({ isOpen, onClose }: CancelModalProps) {
                         <button
                             onClick={() => {
                                 prevStep()
+                                 loginAndFetchSubscription("user6@example.com")
+                      
                             }}
                             className="text-gray-800 flex justify-center items-center ">
                             <Caret className="w-4 h-4 rotate-90" />

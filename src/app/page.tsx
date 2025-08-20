@@ -5,9 +5,10 @@ import CancelModal from './cancelmodal';
 import WarningIcon from '@/assets/warningicon';
 import Caret from '@/assets/caret';
 
+
 // Mock user data for UI display
 const mockUser = {
-  email: 'user@example.com',
+  email: 'user4@example.com',
   id: '1'
 };
 
@@ -23,6 +24,7 @@ const mockSubscriptionData = {
   managedOrganization: null,
   downsellAccepted: false
 };
+
 
 export default function ProfilePage() {
   const [loading] = useState(false);
@@ -44,6 +46,7 @@ export default function ProfilePage() {
   const handleClose = () => {
     console.log('Navigate to jobs');
   };
+  
 
   if (loading) {
     return (
