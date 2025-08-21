@@ -23,6 +23,7 @@
 --AI was used to quickly build components and fine tune them later. Reusability is key. 
 --If cancellation pipeline finished the subscription in the db is set to pending_cancellation.
 --If downsell is accepted the monthly price decreases as well. 
+test
 
 **Security Auth**
 --On inital load with the user email, the admin supabase creates the user entry, subscription and inital cancellation for downsell. /
