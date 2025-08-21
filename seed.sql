@@ -53,6 +53,8 @@ CREATE POLICY "Users can insert own cancellations" ON cancellations
 CREATE POLICY "Users can view own cancellations" ON cancellations
   FOR SELECT USING (auth.uid() = user_id);
 
+
+
 -- Seed data
 INSERT INTO users (id, email) VALUES
   ('550e8400-e29b-41d4-a716-446655440001', 'user1@example.com'),
@@ -75,3 +77,7 @@ ADD COLUMN responses JSONB;
 --Add a column in the table for those with and without jobs. 
 ALTER TABLE cancellations
 ADD COLUMN found_job BOOL;
+
+
+CREATE POLICY "Users can update own subscriptions" ON cancellations
+  FOR UPDATE USING (auth.uid() = user_id);

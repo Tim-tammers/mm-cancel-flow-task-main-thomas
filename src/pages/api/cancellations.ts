@@ -77,12 +77,14 @@ if (!cancellation) {
 
     // If updates exist → apply them
     if (updates && Object.keys(updates).length > 0) {
+    const { reason, accepted_downsell, found_job, responses } = updates;
+    console.log("update: ", updates);
       const { data: updated, error: updateError } = await supabase
         .from("cancellations")
-        .update({ ...updates })
+        .update({ reason, accepted_downsell, found_job, responses })
         .eq("user_id", user.id)
         .select()
-        .single();
+        .maybeSingle();
 
       if (updateError) {
         console.error("Update error:", updateError);

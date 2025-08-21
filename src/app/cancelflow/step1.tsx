@@ -8,19 +8,22 @@ interface StepOneProps {
 
 const JobQuestion: React.FC<StepOneProps> = ({ nextStep,  setJobFound }) => {
   return (
-    <div className="space-y-2.5">
-      <h2 className="text-gray-800">Hey mate, Quick one before you go.</h2>
-      <h2 className="text-gray-800">Have you found a job yet?</h2>
-      <p className="text-gray-800 border-b border-gray-300">
+    <div className="space-y-[20px]">
+      <h2 className="flex flex-col items-start font-semibold">
+        <span>Hey mate,</span>
+        <span>Quick one before you go</span>
+      </h2>
+      <h2 className="italic font-semibold">Have you found a job yet?</h2>
+      <p className="">
         Whatever your answer, we just want to help you take the next step. With visa support, or by hearing how we can do better.
       </p>
-
+       <hr className="border-gray-300 border" />
       <button
         onClick={() => {
           setJobFound(true);
           nextStep();
         }}
-        className="inline-flex items-center justify-center w-full px-4 py-3 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-green-50 hover:border-gray-400 transition-all duration-200 shadow-sm group"
+        className="inline-flex items-center justify-center w-full py-1 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-green-50 hover:border-gray-400 shadow-sm"
       >
         Yes, I've found a job
       </button>
@@ -30,7 +33,7 @@ const JobQuestion: React.FC<StepOneProps> = ({ nextStep,  setJobFound }) => {
           setJobFound(false);
           nextStep();
         }}
-        className="inline-flex items-center justify-center w-full px-4 py-3 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-[#EBE1FE] hover:border-gray-400 transition-all duration-200 shadow-sm group"
+        className="inline-flex items-center justify-center w-full py-1 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-[#EBE1FE] hover:border-gray-400 shadow-sm"
       >
         Not yet - I'm still looking
       </button>

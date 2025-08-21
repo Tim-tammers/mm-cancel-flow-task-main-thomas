@@ -5,11 +5,14 @@ import EmpState from '../assets/empire-state-compressed.jpg';
 import Caret from "@/assets/caret";
 import { useState, useEffect } from "react";
 import Step1Props from "./cancelflow/step1"
-import Step2Job from "./cancelflow/step2job"
+import Step2Can from "./cancelflow/step2can"
 import { Cancellation } from "@/lib/cancellation_model";
-
-import Step3Job from "./cancelflow/step3job"
+import Spinner from "./spinner";
+import Step3Can from "./cancelflow/step3can"
+import Step4Can from "./cancelflow/step4can"
 import { json } from "stream/consumers";
+import ProgressPill from "./cancelflow/progress_pill";
+import AcceptedDownsell from "./cancelflow/acceptedDownsell"
 
 
 interface CancelModalProps {
@@ -54,6 +57,7 @@ async function gupdateUserSubscription(body?: string) {
 }
 
 async function createCancellations(body?: string) {
+    console.log(body);
     const res = await fetch('/api/cancellations', {
   method: 'POST',
   headers: {
@@ -89,21 +93,38 @@ async function loginAndFetchSubscription(email: string) {
 
 
 export default function CancelModal({ isOpen, onClose }: CancelModalProps) {
-    const [step, setStep] = useState(0);
-
-    const nextStep = () => setStep(prev => Math.min(prev + 1, 3));
-    const prevStep = () => setStep(prev => Math.max(prev - 1, 0));
+    const [step, setStep] = useState(1);
+    const [loading, setLoading] = useState(true);
+    const nextStep = () => setStep(prev => Math.min(prev + 1, 4));
+    const prevStep = () => setStep(prev => Math.max(prev - 1, 1));
     const setJobFound = (value: boolean) => {setCancellation(prev => prev ? { ...prev, found_job: value } : null);};
+    const acceptDownsell = (value: boolean) => {setCancellation(prev => prev ? { ...prev, accepted_downsell: value } : null); setStep(4)};
     const onAnswersSubmit = (value: Record<number, string>) => {setCancellation(prev => prev ? { ...prev, responses: value } : null);};
+    const onReasonSubmit = (value: string) => {setCancellation(prev => prev ? { ...prev, reason: value } : null);};
+
     const [cancellation, setCancellation] = useState<Cancellation | null>(null);
+
+    const handleSubmit = async () => {
+        setLoading(true);
+        try {
+          await createCancellations(JSON.stringify(cancellation));
+        } catch (err) {
+        console.error("Error submitting cancellation:", err);
+        } finally {
+        setLoading(false);
+        }
+  };
+
 
     useEffect(() => {
     if (isOpen) {
       (async () => {
         try {
-
-          const cancellation = await loginAndFetchSubscription("user6@example.com"); //change email here to test a new user
+          setLoading(true);
+          const cancellation = await loginAndFetchSubscription("user7@example.com"); //change email here to test a new user
           setCancellation(cancellation);
+          setStep(1);
+          setLoading(false);
     
         } catch (err) {
           console.error("Error fetching state data:", err);
@@ -112,63 +133,86 @@ export default function CancelModal({ isOpen, onClose }: CancelModalProps) {
     }
   }, [isOpen]);
 
-  useEffect(() => {
-  if (cancellation) {
-    console.log("Cancellation updated:", cancellation);
-  }
-}, [cancellation]);
+        useEffect(() => {
+        if (cancellation) {
+            console.log("Cancellation updated:", cancellation);
+        }
+        }, [cancellation]);
+
+        useEffect(() => {
+        if (step === 4) {
+        handleSubmit();
+        }
+        }, [step]);
+
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
+         {loading ? (
+            <Spinner />
+  ) : (
+    <>
+   
+      {step > 1 && step < 4 && (
+        <button
+          onClick={() => prevStep()}
+          className="text-gray-800 flex absolute top-16 left-3 justify-center items-center sm:top-4"
+        >
+          <Caret className="w-4 h-4 rotate-90" />
+          Back
+        </button>
+      )}
+
+            <div className="flex sm:items-center justify-center p-4 border-b border-gray-300 w-full sm:text-center space-x-4 flex-col sm:flex-row">
+                <p className="font-semibold">Subscription Cancellation</p>
+               { !cancellation?.accepted_downsell && <ProgressPill currentStep={step} /> }
+        </div>
 
 
-            <div className="flex flex-col items-center justify-center w-full">
+      <div className="flex p-3 gap-4 sm:flex-row-reverse flex-col w-full">
+        <img
+          src={EmpState.src}
+          alt="Empire-State"
+          className={`sm:w-75 object-cover rounded-lg sm:block shadow ransition-opacity duration-500 ${
+            step > 1 && step < 4 ? "hidden" : ""
+          }`}
+        />
 
-                {step > 0 &&
-                        <button
-                            onClick={() => {
-                                prevStep()
-                            }}
-                            className="text-gray-800 flex absolute top-16 left-3 justify-center items-center sm:top-4 ">
-                            <Caret className="w-4 h-4 rotate-90" />
-                            Back</button>
-                    }
-                <div className="flex text-gray-800 p-4 border-b border-gray-300 w-full sm:text-center" >
-                    <p className=" w-full ">Subscription Cancellation</p>
-                </div>
-                <div className="flex p-3 gap-4 sm:flex-row-reverse flex-col w-full">
-                    <img src={EmpState.src} alt="Empire-State" className={`sm:w-80 object-cover rounded-lg sm:block shadow
-                                                                            ${step > 0 && step <2
-                                                                                ? "hidden"
-                                                                                : ""
-                                                                            }`}/>
-                    {step === 0 && (
-                          <>
-                        {/* <img src={EmpState.src} alt="Empire-State" className="sm:w-80 object-cover rounded-lg sm:block shadow" /> */}
-                        <Step1Props nextStep={nextStep} setJobFound= {setJobFound}/>
-                        </>
-                    )
-                    }
-                    {step === 1 && 
-                    (
-                          <>
-                       {/* <img src={EmpState.src} alt="Empire-State" className="w-80 object-cover rounded-lg hidden sm:block shadow" />  */}
-                     <Step2Job nextStep={nextStep}  
-                                  foundJob={cancellation?.found_job ?? false} 
-                                  hasDownsell={cancellation?.downsell_variant == 'B' ? true : false } 
-                                  onAnswersSubmit={onAnswersSubmit}/>
-                        </>
-                    )
-                        
+        {step === 1 && <Step1Props nextStep={nextStep} setJobFound={setJobFound} />}
 
-                    }
-                    {/* {step === 1 && cancellation?.found_job &&
-                        <Step2Job nextStep={nextStep} />
-
-                    } */}
-                </div>
-
-            </div>
+        {step === 2 && (
+          <Step2Can
+            nextStep={nextStep}
+            foundJob={cancellation?.found_job ?? false}
+            hasDownsell={cancellation?.downsell_variant === "B"}
+            onAnswersSubmit={onAnswersSubmit}
+            acceptDownsell={acceptDownsell}
+          />
+        )}
+        {step === 3 && (
+        <Step3Can nextStep={nextStep}  
+                  foundJob={cancellation?.found_job ?? false}
+                  hasDownsell={cancellation?.downsell_variant === "B"}
+                  acceptDownsell={acceptDownsell}
+                  onReasonSubmit = {onReasonSubmit}
+                  usingMM={cancellation?.responses?.["1"] === "Yes"}
+                  />
+        )}
+        {step === 4 && cancellation?.accepted_downsell && 
+      (
+                    <AcceptedDownsell/>
+             )
+        
+        }
+             {step === 4 && !cancellation?.accepted_downsell &&(
+                    <Step4Can/>
+             )
+    
+        
+        }
+      </div>
+    </>
+  )}
 
         </Modal>
     );

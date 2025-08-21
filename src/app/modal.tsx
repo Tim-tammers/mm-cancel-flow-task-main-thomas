@@ -23,7 +23,7 @@ export default function Modal({ isOpen, onClose, children }: ModalProps) {
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-3 text-gray-800 hover:text-red-600"
+          className="absolute top-2 right-3 text-gray-700 hover:text-red-600"
         >
           ✕
         </button>

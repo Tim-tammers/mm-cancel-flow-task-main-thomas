@@ -1,10 +1,12 @@
 
 import React, { useState } from "react";
-interface Step2Job {
+interface Step2Can {
   nextStep: () => void;
   foundJob: boolean | null;
   hasDownsell: boolean;
   onAnswersSubmit?: (answers: Record<number, string>) => void; 
+  acceptDownsell: (value: boolean) => void; 
+
 }
 interface Question {
   id: number;
@@ -13,7 +15,7 @@ interface Question {
 }
 
 
-const JobQuestion: React.FC<Step2Job> = ({ nextStep, foundJob, hasDownsell, onAnswersSubmit }) => {
+const JobQuestion: React.FC<Step2Can> = ({ nextStep, foundJob, hasDownsell, onAnswersSubmit, acceptDownsell }) => {
   const questions: Question[] = [
   ...(foundJob ? [{ id: 1, text: "Did you find this job with MigrateMate?*", options: ["Yes", "No"] }] : []),
   { id: 2, text: "How many roles did you apply for through MigrateMate?*",   options: ["0", "1-5", "6-20", "20+"],},
@@ -30,12 +32,16 @@ const JobQuestion: React.FC<Step2Job> = ({ nextStep, foundJob, hasDownsell, onAn
     setAnswers((prev) => ({ ...prev, [questionId]: option }));
   };
   const allAnswered = questions.every((q) => answers[q.id]);
-  return (
-    <div className="space-y-2.5 pt-10 sm:pt-0">
      
-      {!displayDownsell && (
-       <>
-      {foundJob && (<h2 className="text-gray-800 text-2xl">Congrats on the new role! 🎉</h2>)}
+     if(!displayDownsell) { 
+      return (
+    <div className="space-y-2.5 pt-10 sm:pt-0">
+      {foundJob ?
+      (<h2 className="text-gray-800 text-2xl">Congrats on the new role! 🎉</h2>):
+      (<h2 className="text-gray-800 text-2xl">Help us understand how you were using Migrate Mate.</h2>)
+      }
+
+      
      <div className=" w-full space-y-4">
       {questions.map((q) => (
         <div key={q.id} className="space-y-3 ">
@@ -59,10 +65,11 @@ const JobQuestion: React.FC<Step2Job> = ({ nextStep, foundJob, hasDownsell, onAn
         </div>
       ))}
     </div>
+    
 {hasDownsell && !foundJob &&
    <button
         onClick={() => {
-          nextStep();
+          acceptDownsell(true);
         }}
         className={`inline-flex items-center justify-center w-full py-1 border
          border-gray-300 text-white-700 rounded-lg 
@@ -95,10 +102,11 @@ const JobQuestion: React.FC<Step2Job> = ({ nextStep, foundJob, hasDownsell, onAn
       >
        Continue
       </button>
-       </>
+      </div>
       )}
-      {displayDownsell && (
-        <>
+      if(displayDownsell) 
+        return(
+         <div className="space-y-2.5 pt-10 sm:pt-0">
         <div className="flex flex-col space-y-3">
          <h2 className="text-gray-800 text-2xl">We built this to help you land the job, this makes it a little easier.</h2>
          <p className="text-md font-large text-gray-900">We've been there and we're here to help you.</p>
@@ -107,6 +115,7 @@ const JobQuestion: React.FC<Step2Job> = ({ nextStep, foundJob, hasDownsell, onAn
             <h3 className="text-[#8952fc] text-sm">$12.50/month <s className="text-gray-400 text-xs">$25/month</s></h3>
             <button
         onClick={() => {
+          acceptDownsell(true);
         }}
         className={`inline-flex items-center justify-center w-full py-1 border
          border-gray-300 text-white-700 rounded-lg 
@@ -129,8 +138,6 @@ const JobQuestion: React.FC<Step2Job> = ({ nextStep, foundJob, hasDownsell, onAn
       </button>
         
         </div>
-        </>
-      )}
 
     </div>
     

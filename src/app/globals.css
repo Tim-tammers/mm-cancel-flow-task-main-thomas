@@ -24,3 +24,18 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+@layer base {
+  button {
+    @apply transition-transform duration-200 ease-in-out; /* smooth hover */
+  }
+
+  button:hover {
+    @apply scale-105; /* slightly expand on hover */
+  }
+  h2{
+    @apply text-gray-800 text-2xl font-sans;
+  }
+  p{
+    @apply text-gray-700 text-xs font-sans;
+  }
+}
