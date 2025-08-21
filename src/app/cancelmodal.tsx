@@ -167,7 +167,7 @@ const prevStep = () => {
       (async () => {
         try {
           setLoading(true);
-          const cancellation = await loginAndFetchSubscription("user11@example.com"); //change email here to test a new user
+          const cancellation = await loginAndFetchSubscription("user20@example.com"); //change email here to test a new user
           setCancellation(cancellation);
           setStep(0);
           setLoading(false);
@@ -219,7 +219,7 @@ const prevStep = () => {
             <img
               src={EmpState.src}
               alt="Empire-State"
-              className={`sm:w-75 sm:h-auto object-cover h-35 rounded-lg sm:block shadow ransition-opacity duration-500 ${step > 0 && (step < 4 || cancellation?.responses?.["5"] === "Yes" )? "hidden" : ""
+              className={`sm:w-75 sm:h-auto object-cover h-35 rounded-lg sm:block shadow ransition-opacity duration-500 ${step > 0 && (step < 4 || cancellation?.responses?.["5"] === "No" )? "hidden" : ""
                 }`}
             />
 
