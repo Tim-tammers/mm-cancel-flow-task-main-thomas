@@ -53,7 +53,7 @@ CREATE POLICY "Users can insert own cancellations" ON cancellations
 CREATE POLICY "Users can view own cancellations" ON cancellations
   FOR SELECT USING (auth.uid() = user_id);
 
-
+--Seed data removed because when setting up Auth it needs to be created under the same roof for matching IDs. 
 
 -- -- Seed data
 -- INSERT INTO users (id, email) VALUES
