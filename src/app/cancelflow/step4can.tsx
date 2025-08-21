@@ -11,6 +11,7 @@ const JobQuestion: React.FC<Step4Can> = ({foundJob, visaHelp}) => {
 
 if(!foundJob) {
 return(
+      <div className="flex flex-col h-full">
   <div className="space-y-[20px]">
    <h2 className=" items-start font-semibold">Sorry to see you go, mate.</h2>
    <h2 className=" items-start font-semibold text-xl">Thanks for being with us, and you're always welcome back.</h2>
@@ -20,14 +21,19 @@ return(
         <span>You'll still have full access until then. No further charges after that.</span>
       </p>
       <p>Change you mind? You can reactivate anytiime before your end date.</p>
-            <hr className="border-gray-300 border" />
-       <button
+            <hr className="border-gray-300 border hidden sm:block" />
+      
+        <div className="pt-4 px-4 shadow-[0_-5px_10px_rgba(0,0,0,0.1)] sm:shadow-none -mx-4 mt-4 sm:m-0 sm:px-0 sm:pt-0">
+   <button
         onClick={() => {
         }}
-        className="inline-flex items-center justify-center w-full py-1 bg-[#996EFF] border border-gray-300 text-white rounded-lg hover:border-gray-400 shadow-sm"
+        className=" px-4 inline-flex items-center justify-center w-full py-2 bg-[#996EFF] border border-gray-300 text-white rounded-lg hover:border-gray-400 shadow-sm"
       >
         Back to Jobs
       </button>
+  </div>
+
+</div>
 </div>
 );
 }else{
@@ -80,7 +86,7 @@ return(
   </div>
 
   {/* Buttons at the bottom */}
-  <div className="pt-4 px-4 shadow-[0_-5px_10px_rgba(0,0,0,0.1)] sm:shadow-none -mx-4 sm:m-0 sm:px-0">
+  <div className="pt-4 px-4 shadow-[0_-5px_10px_rgba(0,0,0,0.1)] sm:shadow-none -mx-4 mt-4 sm:m-0 sm:px-0">
     <button
       onClick={() => {
         // add finish logic here

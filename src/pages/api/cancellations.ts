@@ -30,7 +30,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       .from("cancellations")
       .select("*")
       .eq("user_id", user.id)
-      .limit(1); 
+      .limit(1);
+      
+      console.error("Cancellation before:", cancellation);
+     cancellation = cancellation && cancellation.length > 0 
+        ? cancellation[0] 
+        : null;
+
+      console.error("Cancellation after:", cancellation);
 
     if (subError) {
       console.error("Cancellation lookup error:", subError);
@@ -41,7 +48,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // If no cancellation exists → create one
 if (!cancellation) {
-
   // Insert cancellation with found subscription_id
   const { data: seedCancellation, error: insertError } = await supabase
     .from("cancellations")

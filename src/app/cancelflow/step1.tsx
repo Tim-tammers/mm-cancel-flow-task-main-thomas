@@ -1,6 +1,8 @@
 import React from "react";
 import { Cancellation } from "@/lib/cancellation_model";
 import { truncate } from "fs/promises";
+import StepWrapper from "../components/stepwrapper"
+import ButtonWrapper from "../components/buttonwrapper"
 interface StepOneProps {
   nextStep: () => void;
   setJobFound: (value: boolean) => void; 
@@ -9,8 +11,9 @@ interface StepOneProps {
 
 const JobQuestion: React.FC<StepOneProps> = ({ nextStep,  setJobFound, nextStepNJ }) => {
   return (
+    <StepWrapper> 
     <div className="space-y-[20px]">
-      <h2 className="flex flex-col items-start font-semibold">
+      <h2 className="flex flex-col items-start font-semibold text-base sm:text-2xl">
         <span>Hey mate,</span>
         <span>Quick one before you go</span>
       </h2>
@@ -18,7 +21,8 @@ const JobQuestion: React.FC<StepOneProps> = ({ nextStep,  setJobFound, nextStepN
       <p className="">
         Whatever your answer, we just want to help you take the next step. With visa support, or by hearing how we can do better.
       </p>
-       <hr className="border-gray-300 border" />
+       <hr className="border-gray-300 border hidden sm:block" />
+       <ButtonWrapper className="space-y-2">
       <button
         onClick={() => {
           setJobFound(true);
@@ -38,7 +42,9 @@ const JobQuestion: React.FC<StepOneProps> = ({ nextStep,  setJobFound, nextStepN
       >
         Not yet - I'm still looking
       </button>
+      </ButtonWrapper>
     </div>
+    </StepWrapper>
   );
 };
 

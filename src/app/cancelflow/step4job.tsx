@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import StepWrapper from "../components/stepwrapper"
+import ButtonWrapper from "../components/buttonwrapper"
 interface Step4Job {
   nextStep: () => void;
   usingMM: boolean | null;
@@ -29,6 +31,7 @@ const handleAnswer = (questionId: number, option: string) => {
     setAnswers((prev) => ({ ...prev, [questionId]: option }));
   };
 return(
+  <StepWrapper>
   <div className="space-y-2.5 pt-8 sm:pt-0">
    {usingMM ? (
   <>
@@ -112,7 +115,7 @@ return(
              shadow-sm"
 />
 </>)}
-
+<ButtonWrapper>
  <button
        onClick={async () => {
          if (setVisaInfo) {
@@ -132,7 +135,10 @@ return(
       >
        Complete Cancellation
       </button>
+      </ButtonWrapper>
 </div>
+
+</StepWrapper>
 );
 
 

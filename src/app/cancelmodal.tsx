@@ -85,9 +85,9 @@ async function loginAndFetchSubscription(email: string) {
   }
 
   // Now call getUserSubscription safely
-  const subscription = await gupdateUserSubscription(JSON.stringify({ status: "pending_cancellation" }));
+  const subscription = await gupdateUserSubscription();
 
-  const downsellVariant = (await createCancellations()).cancellation[0].downsell_variant;
+  const downsellVariant = (await createCancellations()).cancellation.downsell_variant;
   console.log("ds_var", downsellVariant);
   const cancellation: Cancellation = {
     subscription_id: subscription.id,
@@ -129,7 +129,7 @@ const prevStep = () => {
 };
 
   const setJobFound = (value: boolean) => { setCancellation(prev => prev ? { ...prev, found_job: value } : null); };
-  const acceptDownsell = (value: boolean) => { setCancellation(prev => prev ? { ...prev, accepted_downsell: value } : null); setStep(3) };
+  const acceptDownsell = (value: boolean) => { setCancellation(prev => prev ? { ...prev, accepted_downsell: value } : null); setStep(4) };
   const onAnswersSubmit = (value: Record<number, string>) => { setCancellation(prev => prev ? { ...prev, responses: value } : null); };
   const onReasonSubmit = (value: string) => { setCancellation(prev => prev ? { ...prev, reason: value } : null); };
 
@@ -152,6 +152,8 @@ const prevStep = () => {
     setLoading(true);
     try {
       await createCancellations(JSON.stringify(cancellation));
+      if(!cancellation?.accepted_downsell)  await gupdateUserSubscription(JSON.stringify({ status: "pending_cancellation" }));
+      else await gupdateUserSubscription(JSON.stringify({ monthly_price: cancellation.current_price - 1000 }));
     } catch (err) {
       console.error("Error submitting cancellation:", err);
     } finally {
@@ -165,7 +167,7 @@ const prevStep = () => {
       (async () => {
         try {
           setLoading(true);
-          const cancellation = await loginAndFetchSubscription("user7@example.com"); //change email here to test a new user
+          const cancellation = await loginAndFetchSubscription("user11@example.com"); //change email here to test a new user
           setCancellation(cancellation);
           setStep(0);
           setLoading(false);
@@ -213,7 +215,7 @@ const prevStep = () => {
           </div>
 
 
-          <div className="flex p-3 gap-4 sm:flex-row-reverse flex-col w-full h-100 sm:h-auto">
+          <div className="flex p-3 gap-4 sm:flex-row-reverse flex-col w-full h-auto sm:h-auto">
             <img
               src={EmpState.src}
               alt="Empire-State"
@@ -251,7 +253,7 @@ const prevStep = () => {
               />
             )
             }
-            {step === 3 && cancellation?.accepted_downsell &&
+            {step === 4 && cancellation?.accepted_downsell &&
               (
                 <AcceptedDownsell />
               )
@@ -275,7 +277,7 @@ const prevStep = () => {
             {step === 4 && !cancellation?.accepted_downsell && (
               <Step4Can 
                foundJob={cancellation?.found_job ?? false}
-               visaHelp = {cancellation?.responses?.["5"] === "Yes" }/>
+               visaHelp = {cancellation?.responses?.["5"] === "No" }/>
             )
             }
           </div>

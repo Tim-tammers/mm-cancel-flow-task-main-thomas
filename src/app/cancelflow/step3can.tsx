@@ -1,5 +1,7 @@
 
 import React, { useState } from "react";
+import StepWrapper from "../components/stepwrapper"
+import ButtonWrapper from "../components/buttonwrapper"
 interface Step3Can {
   nextStep: () => void;
   foundJob: boolean | null;
@@ -47,6 +49,7 @@ const maxPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   };
 if(foundJob){
   return (
+    <StepWrapper>
     <div className="space-y-2.5 pt-8 sm:pt-0">
         <h2 className="text-gray-800 text-2xl">What's one thing you wish we could have helped you with?</h2>
         <p className="text-gray-900 text-xs">We’re always looking to improve, your thoughts can help us make Migrate Mate more useful for others.*</p> 
@@ -64,6 +67,7 @@ if(foundJob){
               Min {minChars} charaters({text.length} / {minChars})
             </div>
           </div>
+          <ButtonWrapper>
       <button
        onClick={async () => {
           onReasonSubmit(`${text}${amount}`);
@@ -82,10 +86,13 @@ if(foundJob){
       >
        Continue
       </button>
+      </ButtonWrapper>
     </div>
+    </StepWrapper>
   );
 } else {
   return (
+    <StepWrapper>
  <div className="space-y-2.5 pt-8 sm:pt-0">
   <div>
   <h2 className="text-gray-800 text-2xl">What's the main reason for cancelling?</h2>
@@ -167,6 +174,8 @@ if(foundJob){
 
   
 }
+
+<ButtonWrapper className="space-y-2">
       {hasDownsell &&
    <button
         onClick={() => {
@@ -186,6 +195,7 @@ if(foundJob){
           onReasonSubmit(`${selectedOption} - ${text}${amount}`);
           nextStep();
         }}
+        disabled={amount.length > 0 || text.length >= 25}
         className={`inline-flex items-center justify-center w-full py-1 border
          border-gray-300 text-gray-700 rounded-lg 
           hover:border-gray-400 transition-all duration-200 shadow-sm group
@@ -198,7 +208,9 @@ if(foundJob){
       >
        Continue
       </button>
+      </ButtonWrapper>
     </div>
+    </StepWrapper>
   );
 }
 };

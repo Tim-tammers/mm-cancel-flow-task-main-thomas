@@ -1,5 +1,7 @@
 
 import React, { useState } from "react";
+import StepWrapper from "../components/stepwrapper"
+import ButtonWrapper from "../components/buttonwrapper"
 interface Step2Can {
   nextStep: () => void;
   foundJob: boolean | null;
@@ -33,6 +35,7 @@ const JobQuestion: React.FC<Step2Can> = ({ nextStep, foundJob, hasDownsell, onAn
   const allAnswered = questions.every((q) => answers[q.id]);
      
       return (
+        <StepWrapper>
     <div className="space-y-2.5 pt-8 sm:pt-0">
       {foundJob ?
       (<h2 className="text-gray-800 text-2xl">Congrats on the new role! 🎉</h2>):
@@ -63,8 +66,10 @@ const JobQuestion: React.FC<Step2Can> = ({ nextStep, foundJob, hasDownsell, onAn
         </div>
       ))}
     </div>
-    
+    <ButtonWrapper className="space-y-2">
 {hasDownsell && !foundJob &&
+
+
    <button
         onClick={() => {
           acceptDownsell(true);
@@ -100,8 +105,12 @@ const JobQuestion: React.FC<Step2Can> = ({ nextStep, foundJob, hasDownsell, onAn
       >
        Continue
       </button>
+
+</ButtonWrapper>
       </div>
-      )
+
+      </StepWrapper>
+      );
   
 };
 
