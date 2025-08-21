@@ -2,16 +2,18 @@
 import React, { useState } from "react";
 import StepWrapper from "../components/stepwrapper"
 import ButtonWrapper from "../components/buttonwrapper"
+import DownsellButton from "../components/downsellbutton";
 interface Step3Can {
   nextStep: () => void;
   foundJob: boolean | null;
   hasDownsell: boolean;
   acceptDownsell: (value: boolean) => void; 
   onReasonSubmit: (value: string) => void;
+  currentPrice: number;
 }
 
 
-const JobQuestion: React.FC<Step3Can> = ({ nextStep, foundJob, hasDownsell, acceptDownsell, onReasonSubmit }) => {
+const JobQuestion: React.FC<Step3Can> = ({ nextStep, foundJob, hasDownsell, acceptDownsell, onReasonSubmit, currentPrice }) => {
 const [selectedOption, setSelectedOption] = useState<string | null>(null);
 const options = ["Too expensive", "Platform not helpful", "Not enough relevant jobs", "Decided not to move", "Other"];
 const [errorMsg, setErrorMsg] = useState("");
@@ -188,18 +190,10 @@ if(foundJob){
 
 <ButtonWrapper className="space-y-2">
       {hasDownsell &&
-   <button
-        onClick={() => {
-          acceptDownsell(true);
-        }}
-        className={`inline-flex items-center justify-center w-full py-1 border
-         border-gray-300 text-white-700 rounded-lg 
-          hover:border-gray-400 transition-all duration-200 shadow-sm group
-          bg-green-600 hover:bg-green-800
-            `}
-      >
-       Get $10 off | $12.50  <s className="text-xs">$25</s>
-      </button>
+   <DownsellButton 
+    currentPrice={currentPrice}
+    acceptDownsell={acceptDownsell}
+/>
 }
   <button
        onClick={async () => {

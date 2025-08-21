@@ -5,11 +5,13 @@ import ButtonWrapper from "../components/buttonwrapper"
 interface DownsellStep {
   nextStep: () => void;
   acceptDownsell: (value: boolean) => void; 
+  currentPrice: number;
 }
 
 
-const JobQuestion: React.FC<DownsellStep> = ({ nextStep, acceptDownsell }) => {
-
+const JobQuestion: React.FC<DownsellStep> = ({ nextStep, acceptDownsell, currentPrice }) => {
+   const formattedPrice = ((currentPrice - 1000) / 100).toFixed(2);
+   const noDecimal = (currentPrice/100);
         return(
           <StepWrapper>
          <div className="space-y-2.5 pt-10 sm:pt-0">
@@ -18,7 +20,7 @@ const JobQuestion: React.FC<DownsellStep> = ({ nextStep, acceptDownsell }) => {
          <p className="text-md font-large text-gray-900">We've been there and we're here to help you.</p>
         <div className="bg-[#EBE1FE] p-2 border rounded-lg border-[#8952fc] flex flex-col  items-start sm:items-center space-y-2">
           <h2 className="text-gray-900 font-semibold text-xl">Here's <span className="underline">$10 off</span> until you find a job.</h2>
-            <h3 className="text-[#8952fc] text-base font-semibold">$15.00/month <s className="text-gray-400 text-xs">$25/month</s></h3>
+            <h3 className="text-[#8952fc] text-base font-semibold">  ${formattedPrice} <s className="text-gray-400 text-xs">${noDecimal}/month</s></h3>
             <button
         onClick={() => {
           acceptDownsell(true);

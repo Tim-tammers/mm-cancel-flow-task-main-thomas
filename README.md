@@ -5,6 +5,8 @@
 **MM Take Home Assignment**
 
 **Architechture Designs**
+!!!In order to test the user change the testemail in cancelmodal.tsx. It's at the top of the page. 
+
 --Step by step that resuses components to simplify codebase and make changes accross pages easier.
 --On modal load the api is called and returns the user authentication and the downsell variant assigned to the user.
   -if user doesnt exist then one is created along with a subscription and cancellation entry that assigns downsell.

@@ -10,12 +10,13 @@ import { Cancellation } from "@/lib/cancellation_model";
 import Spinner from "./spinner";
 import Step3Can from "./cancelflow/step3can"
 import Step4Can from "./cancelflow/step4can"
-import { json } from "stream/consumers";
 import ProgressPill from "./cancelflow/progress_pill";
 import AcceptedDownsell from "./cancelflow/acceptedDownsell"
 import DownsellStep from "./cancelflow/downsellStep"
 import Step4Job from "./cancelflow/step4job"
 
+
+const testemail: string = "user21@test.com";
 
 interface CancelModalProps {
   isOpen: boolean;
@@ -76,9 +77,9 @@ async function createCancellations(body?: string) {
   return cancellation
 }
 
-async function loginAndFetchSubscription(email: string) {
+async function loginAndFetchSubscription() {
   // Wait for login to finish and token to be set
-  const session = await getUserAuth(email);
+  const session = await getUserAuth(testemail);
 
   if (!userToken) {
     throw new Error('Login failed, no token available');
@@ -167,7 +168,7 @@ const prevStep = () => {
       (async () => {
         try {
           setLoading(true);
-          const cancellation = await loginAndFetchSubscription("user20@example.com"); //change email here to test a new user
+          const cancellation = await loginAndFetchSubscription(); //change email here to test a new user
           setCancellation(cancellation);
           setStep(0);
           setLoading(false);
@@ -232,9 +233,11 @@ const prevStep = () => {
                 hasDownsell={hasDownsell}
                 onAnswersSubmit={onAnswersSubmit}
                 acceptDownsell={acceptDownsell}
+                currentPrice={cancellation?.current_price ?? 0}
               />):
               <DownsellStep nextStep={nextStep}
-                acceptDownsell={acceptDownsell}/>
+                acceptDownsell={acceptDownsell}
+                currentPrice={cancellation?.current_price ?? 0}/>
             )
             }
              {step === 2 && (cancellation?.found_job ? (
@@ -243,6 +246,7 @@ const prevStep = () => {
                 hasDownsell={hasDownsell}
                 acceptDownsell={acceptDownsell}
                 onReasonSubmit={onReasonSubmit}
+                currentPrice={cancellation?.current_price ?? 0}
               />):
                <Step2Can
                 nextStep={nextStep}
@@ -250,12 +254,15 @@ const prevStep = () => {
                 hasDownsell={hasDownsell}
                 onAnswersSubmit={onAnswersSubmit}
                 acceptDownsell={acceptDownsell}
+                currentPrice={cancellation?.current_price|| 0}
               />
             )
             }
             {step === 4 && cancellation?.accepted_downsell &&
               (
-                <AcceptedDownsell />
+                <AcceptedDownsell
+                currentPrice={cancellation?.current_price ?? 0}
+                 />
               )
 
             }
@@ -270,6 +277,7 @@ const prevStep = () => {
                 hasDownsell={hasDownsell}
                 acceptDownsell={acceptDownsell}
                 onReasonSubmit={onReasonSubmit}
+                  currentPrice={cancellation?.current_price ?? 0}
               />
             )
             }

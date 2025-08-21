@@ -2,13 +2,14 @@
 import React, { useState } from "react";
 import StepWrapper from "../components/stepwrapper"
 import ButtonWrapper from "../components/buttonwrapper"
+import DownsellButton from "../components/downsellbutton";
 interface Step2Can {
   nextStep: () => void;
   foundJob: boolean | null;
   hasDownsell: boolean;
   onAnswersSubmit?: (answers: Record<number, string>) => void; 
   acceptDownsell: (value: boolean) => void; 
-
+ currentPrice: number;
 }
 interface Question {
   id: number;
@@ -17,15 +18,13 @@ interface Question {
 }
 
 
-const JobQuestion: React.FC<Step2Can> = ({ nextStep, foundJob, hasDownsell, onAnswersSubmit, acceptDownsell }) => {
+const JobQuestion: React.FC<Step2Can> = ({ nextStep, foundJob, hasDownsell, onAnswersSubmit, acceptDownsell,currentPrice }) => {
   const questions: Question[] = [
   ...(foundJob ? [{ id: 1, text: "Did you find this job with MigrateMate?*", options: ["Yes", "No"] }] : []),
   { id: 2, text: "How many roles did you apply for through MigrateMate?*",   options: ["0", "1-5", "6-20", "20+"],},
   { id: 3, text: "How many companies did you email directly?*", options: ["0", "1-5", "6-20", "20+"], },
   { id: 4, text: "How many different companies did interview with?*", options: ["0", "1-2", "3-5", "5+"],},
 ];
-
-
 
   const [errorMsg, setErrorMsg] = useState(""); 
   const [answers, setAnswers] = useState<Record<number, string>>({});
@@ -69,19 +68,11 @@ const JobQuestion: React.FC<Step2Can> = ({ nextStep, foundJob, hasDownsell, onAn
     <ButtonWrapper className="space-y-2">
 {hasDownsell && !foundJob &&
 
-
-   <button
-        onClick={() => {
-          acceptDownsell(true);
-        }}
-        className={`inline-flex items-center justify-center w-full py-1 border
-         border-gray-300 text-white-700 rounded-lg 
-          hover:border-gray-400 transition-all duration-200 shadow-sm group
-          bg-green-600 hover:bg-green-800
-            `}
-      >
-       Get 50% off | $12.50  <s className="text-xs">$25</s>
-      </button>
+<DownsellButton 
+currentPrice={currentPrice}
+acceptDownsell={acceptDownsell}
+/>
+  
 }
       <button
         onClick={() => {

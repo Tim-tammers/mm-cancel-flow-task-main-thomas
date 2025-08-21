@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import StepWrapper from "../components/stepwrapper"
 import ButtonWrapper from "../components/buttonwrapper"
 interface AcceptDownsell {
-
+currentPrice: number;
 }
 
 
-const JobQuestion: React.FC<AcceptDownsell> = ({ }) => {
+const JobQuestion: React.FC<AcceptDownsell> = ({ currentPrice}) => {
+  const newPrice = ((currentPrice - 1000) / 100).toFixed(2);
 return(
   <StepWrapper>
   <div className="space-y-[20px]">
@@ -17,7 +18,7 @@ return(
 {/* need to add logic to handle the actual subscription data to display the proper days instead of xx */}
     <p className="flex flex-col items-start font-semibold">
         <span>You've got XX days left on your current plan.</span>
-        <span>Starting from xx date, your monthly payment will be $12.50</span>
+        <span>Starting from xx date, your monthly payment will be ${newPrice}</span>
       </p>
       <p>You can cancel anytime before then.</p>
             <hr className="border-gray-300 border sm:block hidden" />
