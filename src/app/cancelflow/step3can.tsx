@@ -5,12 +5,11 @@ interface Step3Can {
   foundJob: boolean | null;
   hasDownsell: boolean;
   acceptDownsell: (value: boolean) => void; 
-  usingMM: boolean | null;
   onReasonSubmit: (value: string) => void;
 }
 
 
-const JobQuestion: React.FC<Step3Can> = ({ nextStep, foundJob, hasDownsell, acceptDownsell, usingMM, onReasonSubmit }) => {
+const JobQuestion: React.FC<Step3Can> = ({ nextStep, foundJob, hasDownsell, acceptDownsell, onReasonSubmit }) => {
 const [selectedOption, setSelectedOption] = useState<string | null>(null);
 const options = ["Too expensive", "Platform not helpful", "Not enough relevant jobs", "Decided not to move", "Other"];
 
@@ -48,20 +47,38 @@ const maxPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   };
 if(foundJob){
   return (
-    <div className="space-y-2.5">
-      <h2 className="text-gray-800 text-2xl">Congrats on the new role! 🎉</h2>
-     
-        {usingMM &&
-          <h2 className="text-gray-800 text-2xl">Congrats on the new role! 🎉</h2>}
+    <div className="space-y-2.5 pt-8 sm:pt-0">
+        <h2 className="text-gray-800 text-2xl">What's one thing you wish we could have helped you with?</h2>
+        <p className="text-gray-900 text-xs">We’re always looking to improve, your thoughts can help us make Migrate Mate more useful for others.*</p> 
+    <div className="relative w-full">
+            <textarea
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              rows={4}
+              minLength={minChars}
+              className="w-full rounded-lg border border-gray-300 p-3 text-gray-800 
+                        focus:outline-none focus:ring-2 focus:ring-blue-400 
+                        shadow-sm resize-none"
+            />
+            <div className="absolute bottom-2 right-3 text-xs text-gray-500">
+              Min {minChars} charaters({text.length} / {minChars})
+            </div>
+          </div>
       <button
-        onClick={() => {
+       onClick={async () => {
+          onReasonSubmit(`${text}${amount}`);
           nextStep();
         }}
-        className={`inline-flex items-center 
-        justify-center w-full px-4  border
+        className={`inline-flex items-center justify-center w-full py-1 border
          border-gray-300 text-gray-700 rounded-lg 
           hover:border-gray-400 transition-all duration-200 shadow-sm group
-           `}
+          ${
+            amount.length > 0 || text.length > 25
+              ?  "bg-[#996EFF] border text-white"
+              : "bg-gray-300 text-gray-500 cursor-not-allowed"
+          }     `
+          }
+         
       >
        Continue
       </button>
@@ -69,7 +86,7 @@ if(foundJob){
   );
 } else {
   return (
- <div className="space-y-2.5">
+ <div className="space-y-2.5 pt-8 sm:pt-0">
   <div>
   <h2 className="text-gray-800 text-2xl">What's the main reason for cancelling?</h2>
   <p className="text-gray-900 text-xs">Please take a minute to let us know why:</p> 
@@ -131,7 +148,7 @@ if(foundJob){
             <textarea
               value={text}
               onChange={(e) => setText(e.target.value)}
-              rows={6}
+              rows={4}
               minLength={minChars}
               className="w-full rounded-lg border border-gray-300 p-3 text-gray-800 
                         focus:outline-none focus:ring-2 focus:ring-blue-400 
@@ -161,7 +178,7 @@ if(foundJob){
           bg-green-600 hover:bg-green-800
             `}
       >
-       Get 50% off | $12.50  <s className="text-xs">$25</s>
+       Get $10 off | $12.50  <s className="text-xs">$25</s>
       </button>
 }
   <button
@@ -173,7 +190,7 @@ if(foundJob){
          border-gray-300 text-gray-700 rounded-lg 
           hover:border-gray-400 transition-all duration-200 shadow-sm group
           ${
-            amount.length > 0 || text.length > 25
+            amount.length > 0 || text.length >= 25
               ?  "bg-red-600 hover:bg-red-500 text-white"
               : "bg-gray-300 text-gray-500 cursor-not-allowed"
           }     `

@@ -18,7 +18,7 @@ export default function Modal({ isOpen, onClose, children }: ModalProps) {
       />
 
       {/* Modal content */}
-      <div className=" max-w-3xl w-full px-4 sm:px-6 lg:px-8 overflow-hidden ">
+      <div className=" max-w-3xl w-full px-4 sm:px-6 lg:px-8 overflow-hidden">
       <div className="relative bg-white rounded-lg overflow-hidden">
         {/* Close button */}
         <button

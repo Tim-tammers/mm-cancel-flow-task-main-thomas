@@ -1,4 +1,4 @@
-import { supabaseAdmin, supabase } from "@/lib/supabase";
+import { supabaseAdmin, supabase, getPriceVariant } from "@/lib/supabase";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -44,7 +44,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         .insert([
           {
             user_id: user.id,
-            monthly_price: 2500, // default $25 plan
+            monthly_price: getPriceVariant(), // random 25 or 29 dollar plan
             status: "active",
           }
         ])

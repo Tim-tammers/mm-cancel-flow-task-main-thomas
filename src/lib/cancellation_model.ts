@@ -1,6 +1,4 @@
-export interface Cancellation {
-  readonly id: string;                  
-  readonly user_id: string;              
+export interface Cancellation {                      
   readonly subscription_id: string;      
   readonly downsell_variant?: string;   
   reason?: string;          
@@ -8,4 +6,5 @@ export interface Cancellation {
   created_at: string;          
   found_job?: boolean;         
   responses?: Record<string, any>; 
+  current_price: number;
 }

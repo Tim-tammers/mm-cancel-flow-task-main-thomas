@@ -38,3 +38,17 @@ export function getABVariant(): "A" | "B" {
 
   return randomBit === 0 ? "A" : "B";
 }
+
+export function getPriceVariant(): 2500 | 2900 {
+  // Create a Uint8Array with 1 byte
+  const array = new Uint8Array(1);
+
+  // Fill it with a cryptographically secure random number
+  crypto.getRandomValues(array);
+
+  // Map to 0 or 1
+  const randomBit = array[0] % 2;
+
+  return randomBit === 0 ? 2500 : 2900;
+}
+

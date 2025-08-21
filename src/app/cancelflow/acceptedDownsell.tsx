@@ -10,6 +10,8 @@ return(
    <h2 className=" items-start font-semibold">Great choice, mate!</h2>
    <h2 className=" items-start font-semibold text-xl">You're still on the path to your dream role. <span className="text-[#996EFF]">Let's make it happen together!</span></h2>
 
+
+{/* need to add logic to handle the actual subscription data to display the proper days instead of xx */}
     <p className="flex flex-col items-start font-semibold">
         <span>You've got XX days left on your current plan.</span>
         <span>Starting from xx date, your monthly payment will be $12.50</span>

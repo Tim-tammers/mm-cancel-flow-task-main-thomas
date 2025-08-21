@@ -8,7 +8,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (!token)
       return res.status(401).json({ error: "Authorization token missing" });
 
-    const updates = req.body; // fields user wants to update (status, reason, etc.)
+    const newCancellation = req.body; // fields user wants to update (status, reason, etc.)
 
     // Create a client scoped to the provided JWT
     const supabase = authClient(token);
@@ -30,7 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       .from("cancellations")
       .select("*")
       .eq("user_id", user.id)
-      .maybeSingle();
+      .limit(1); 
 
     if (subError) {
       console.error("Cancellation lookup error:", subError);
@@ -41,24 +41,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // If no cancellation exists → create one
 if (!cancellation) {
-  // Fetch user's subscription
-  const { data: subscription, error: subError } = await supabase
-    .from("subscriptions")
-    .select("id")
-    .eq("user_id", user.id)
-    .maybeSingle(); // returns null if none found
-
-  if (subError) {
-    console.error("Subscription lookup error:", subError);
-    return res.status(500).json({ error: "Failed to find subscription", details: subError.message });
-  }
 
   // Insert cancellation with found subscription_id
-  const { data: newCancellation, error: insertError } = await supabase
+  const { data: seedCancellation, error: insertError } = await supabase
     .from("cancellations")
     .insert({
-      user_id: user.id,
-      subscription_id: subscription?.id || null, // fallback if none exists
+      user_id: user.id, 
       downsell_variant: getABVariant(),
     })
     .select()
@@ -70,18 +58,38 @@ if (!cancellation) {
   }
 
   return res.status(200).json({
-    cancellation: newCancellation,
+    cancellation: seedCancellation,
     message: "Cancellation created successfully",
   });
 }
 
     // If updates exist → apply them
-    if (updates && Object.keys(updates).length > 0) {
-    const { reason, accepted_downsell, found_job, responses } = updates;
-    console.log("update: ", updates);
+    if (newCancellation && Object.keys(newCancellation).length > 0) {
+        // Fetch user's subscription
+        const { data: subscription, error: subError } = await supabase
+          .from("subscriptions")
+          .select("id")
+          .eq("user_id", user.id)
+          .maybeSingle(); // returns null if none found
+
+        if (subError) {
+          console.error("Subscription lookup error:", subError);
+          return res.status(500).json({ error: "Failed to find subscription", details: subError.message });
+        }
+
+      
+    const { reason, accepted_downsell, found_job, responses, downsell_variant } = newCancellation;
+    console.log("update: ", newCancellation);
       const { data: updated, error: updateError } = await supabase
         .from("cancellations")
-        .update({ reason, accepted_downsell, found_job, responses })
+        .insert
+        ({ user_id:user.id,
+          subscription_id: subscription?.id,
+          reason, 
+          accepted_downsell, 
+          found_job, 
+          responses, 
+          downsell_variant })
         .eq("user_id", user.id)
         .select()
         .maybeSingle();
@@ -101,7 +109,8 @@ if (!cancellation) {
     }
 
     // No updates sent → return existing cancellation
-    res.status(200).json({ cancellation });
+  res.status(200).json({ cancellation });
+
   } catch (err: any) {
     console.error("Unexpected error:", err);
     res

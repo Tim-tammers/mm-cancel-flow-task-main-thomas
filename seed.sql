@@ -79,5 +79,3 @@ ALTER TABLE cancellations
 ADD COLUMN found_job BOOL;
 
 
-CREATE POLICY "Users can update own subscriptions" ON cancellations
-  FOR UPDATE USING (auth.uid() = user_id);

@@ -4,9 +4,10 @@ import { truncate } from "fs/promises";
 interface StepOneProps {
   nextStep: () => void;
   setJobFound: (value: boolean) => void; 
+  nextStepNJ:  () => void;
 }
 
-const JobQuestion: React.FC<StepOneProps> = ({ nextStep,  setJobFound }) => {
+const JobQuestion: React.FC<StepOneProps> = ({ nextStep,  setJobFound, nextStepNJ }) => {
   return (
     <div className="space-y-[20px]">
       <h2 className="flex flex-col items-start font-semibold">
@@ -31,7 +32,7 @@ const JobQuestion: React.FC<StepOneProps> = ({ nextStep,  setJobFound }) => {
       <button
         onClick={() => {
           setJobFound(false);
-          nextStep();
+          nextStepNJ();
         }}
         className="inline-flex items-center justify-center w-full py-1 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-[#EBE1FE] hover:border-gray-400 shadow-sm"
       >
