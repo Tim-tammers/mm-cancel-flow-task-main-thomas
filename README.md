@@ -21,7 +21,8 @@
     Completion Step: Displays confirmation messages; handles visa support prompts if applicable.
 --Atomic API Calls: Ensures that submission of reason, downsell acceptance, and flow progression occur in the correct order.
 --AI was used to quickly build components and fine tune them later. Reusability is key. 
-
+--If cancellation pipeline finished the subscription in the db is set to pending_cancellation.
+--If downsell is accepted the monthly price decreases as well. 
 
 **Security Auth**
 --On inital load with the user email, the admin supabase creates the user entry, subscription and inital cancellation for downsell. /
