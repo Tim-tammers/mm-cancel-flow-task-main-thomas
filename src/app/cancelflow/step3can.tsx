@@ -14,6 +14,7 @@ interface Step3Can {
 const JobQuestion: React.FC<Step3Can> = ({ nextStep, foundJob, hasDownsell, acceptDownsell, onReasonSubmit }) => {
 const [selectedOption, setSelectedOption] = useState<string | null>(null);
 const options = ["Too expensive", "Platform not helpful", "Not enough relevant jobs", "Decided not to move", "Other"];
+const [errorMsg, setErrorMsg] = useState("");
 
 const optionMap: Record<string, string> = {
   "Too expensive": "What would be the maximum you would be willing to pay?*",
@@ -53,6 +54,8 @@ if(foundJob){
     <div className="space-y-2.5 pt-8 sm:pt-0">
         <h2 className="text-gray-800 text-2xl">What's one thing you wish we could have helped you with?</h2>
         <p className="text-gray-900 text-xs">We’re always looking to improve, your thoughts can help us make Migrate Mate more useful for others.*</p> 
+          {errorMsg && <p className="text-red-600 text-sm mt-1">{errorMsg}</p>}
+
     <div className="relative w-full">
             <textarea
               value={text}
@@ -69,9 +72,14 @@ if(foundJob){
           </div>
           <ButtonWrapper>
       <button
-       onClick={async () => {
-          onReasonSubmit(`${text}${amount}`);
-          nextStep();
+          onClick={async () => {
+          if(amount.length > 0 || text.length >= 25){
+             onReasonSubmit(`${text}${amount}`);
+             nextStep();
+          }else{
+            setErrorMsg("To help us understand your experience, please give some feedback*")
+         
+          }
         }}
         className={`inline-flex items-center justify-center w-full py-1 border
          border-gray-300 text-gray-700 rounded-lg 
@@ -94,10 +102,13 @@ if(foundJob){
   return (
     <StepWrapper>
  <div className="space-y-2.5 pt-8 sm:pt-0">
-  <div>
+  
   <h2 className="text-gray-800 text-2xl">What's the main reason for cancelling?</h2>
+  {errorMsg && <p className="text-red-600 text-sm mt-1">{errorMsg}</p>}
+
+   <hr className="border-gray-300 border sm:block" />
   <p className="text-gray-900 text-xs">Please take a minute to let us know why:</p> 
-  </div>
+  
     {!selectedOption ? (
      <>
       <div className="space-y-2">
@@ -192,10 +203,14 @@ if(foundJob){
 }
   <button
        onClick={async () => {
-          onReasonSubmit(`${selectedOption} - ${text}${amount}`);
+          if(amount.length > 0 || text.length >= 25){
+             onReasonSubmit(`${selectedOption} - ${text}${amount}`);
           nextStep();
+          }else{
+            setErrorMsg("To help us understand your experience, please select a reason for cancelling*")
+         
+          }
         }}
-        disabled={amount.length > 0 || text.length >= 25}
         className={`inline-flex items-center justify-center w-full py-1 border
          border-gray-300 text-gray-700 rounded-lg 
           hover:border-gray-400 transition-all duration-200 shadow-sm group

@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import StepWrapper from "../components/stepwrapper"
+import ButtonWrapper from "../components/buttonwrapper"
 interface AcceptDownsell {
 
 }
@@ -6,6 +8,7 @@ interface AcceptDownsell {
 
 const JobQuestion: React.FC<AcceptDownsell> = ({ }) => {
 return(
+  <StepWrapper>
   <div className="space-y-[20px]">
    <h2 className=" items-start font-semibold">Great choice, mate!</h2>
    <h2 className=" items-start font-semibold text-xl">You're still on the path to your dream role. <span className="text-[#996EFF]">Let's make it happen together!</span></h2>
@@ -17,7 +20,8 @@ return(
         <span>Starting from xx date, your monthly payment will be $12.50</span>
       </p>
       <p>You can cancel anytime before then.</p>
-            <hr className="border-gray-300 border" />
+            <hr className="border-gray-300 border sm:block hidden" />
+            <ButtonWrapper>
        <button
         onClick={() => {
         }}
@@ -25,7 +29,9 @@ return(
       >
         Land your dream role
       </button>
+      </ButtonWrapper>
 </div>
+</StepWrapper>
 );
 
 

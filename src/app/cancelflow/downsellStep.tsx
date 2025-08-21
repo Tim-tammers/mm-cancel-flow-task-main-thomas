@@ -17,7 +17,7 @@ const JobQuestion: React.FC<DownsellStep> = ({ nextStep, acceptDownsell }) => {
          <h2 className="text-gray-800 text-2xl">We built this to help you land the job, this makes it a little easier.</h2>
          <p className="text-md font-large text-gray-900">We've been there and we're here to help you.</p>
         <div className="bg-[#EBE1FE] p-2 border rounded-lg border-[#8952fc] flex flex-col  items-start sm:items-center space-y-2">
-          <h2 className="text-gray-900 font-semibold">Here's <span className="underline">$10 off</span> until you find a job.</h2>
+          <h2 className="text-gray-900 font-semibold text-xl">Here's <span className="underline">$10 off</span> until you find a job.</h2>
             <h3 className="text-[#8952fc] text-base font-semibold">$15.00/month <s className="text-gray-400 text-xs">$25/month</s></h3>
             <button
         onClick={() => {

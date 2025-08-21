@@ -27,7 +27,7 @@ const JobQuestion: React.FC<Step2Can> = ({ nextStep, foundJob, hasDownsell, onAn
 
 
 
-
+  const [errorMsg, setErrorMsg] = useState(""); 
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const handleAnswer = (questionId: number, option: string) => {
     setAnswers((prev) => ({ ...prev, [questionId]: option }));
@@ -42,7 +42,7 @@ const JobQuestion: React.FC<Step2Can> = ({ nextStep, foundJob, hasDownsell, onAn
       (<h2 className="text-gray-800 text-2xl">Help us understand how you were using Migrate Mate.</h2>)
       }
 
-      
+       {errorMsg && <p className="text-red-600 text-sm mt-1">{errorMsg}</p>}
      <div className=" w-full space-y-4">
       {questions.map((q) => (
         <div key={q.id} className="space-y-3 ">
@@ -84,12 +84,14 @@ const JobQuestion: React.FC<Step2Can> = ({ nextStep, foundJob, hasDownsell, onAn
       </button>
 }
       <button
-        disabled={!allAnswered}
         onClick={() => {
-            if (onAnswersSubmit) {
-            onAnswersSubmit(answers);  // 🔥 only send up when continue is clicked
-              }
-            nextStep();
+            if (allAnswered && onAnswersSubmit) {
+            onAnswersSubmit(answers); 
+            nextStep(); // 🔥 only send up when continue is clicked
+              }else{
+                setErrorMsg("Mind letting us know why you’re cancelling? It helps us understand your experience and improve the platform.*");
+        }
+            
         }}
         className={`inline-flex items-center justify-center w-full py-1 border
          border-gray-300 text-gray-700 rounded-lg 

@@ -15,6 +15,7 @@ const options = ["Yes", "No"];
 const [answers, setAnswers] = useState<Record<number, string>>({});
 const [selectedOption, setSelectedOption] = useState<string | null>(null);
 const [text, setText] = useState("");
+const [errorMsg, setErrorMsg] = useState("");
 const minChars = 1;
 const handlVisaInput = (input: string) => {
     setText(input);
@@ -55,6 +56,7 @@ return(
   </>
 )}
 <p>Is your company providing an immigration lawyer to help with your visa?</p>
+  {errorMsg && <p className="text-red-600 text-sm mt-1">{errorMsg}</p>}
     {!selectedOption ? (
      <>
       <div className="space-y-2">
@@ -118,10 +120,13 @@ return(
 <ButtonWrapper>
  <button
        onClick={async () => {
-         if (setVisaInfo) {
-            setVisaInfo(answers);  // 🔥 only send up when continue is clicked
+         if (text.length >= minChars) {
+            setVisaInfo(answers);
+            nextStep();  // 🔥 only send up when continue is clicked
+              }else{
+                setErrorMsg("We could help you with that visa, mate!*");
               }
-          nextStep();
+          
         }}
         className={`inline-flex items-center justify-center w-full py-1 border
          border-gray-300 text-gray-700 rounded-lg 
