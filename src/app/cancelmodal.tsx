@@ -16,7 +16,7 @@ import DownsellStep from "./cancelflow/downsellStep"
 import Step4Job from "./cancelflow/step4job"
 
 
-const testemail: string = "user21@test.com";
+const testemail: string = "user@example.com";
 
 interface CancelModalProps {
   isOpen: boolean;

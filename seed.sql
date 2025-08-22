@@ -79,3 +79,9 @@ ALTER TABLE cancellations
 ADD COLUMN found_job BOOL;
 
 
+
+--Insert users into table from auth id to avoid conflict.
+INSERT INTO public.users (id, email, created_at)
+SELECT id, email, created_at
+FROM auth.users
+ON CONFLICT (id) DO NOTHING; 

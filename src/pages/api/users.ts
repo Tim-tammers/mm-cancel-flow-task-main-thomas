@@ -38,7 +38,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     user = newUser;
 
-    //If no user set create a subscription for testing. 
+   
+    
+  }
+
+  //Check for a subscription
+    let { data: subscription, error: subError } = await supabase
+    .from("subscriptions")
+    .select("*")
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+    if (subError) {
+    console.error("Subscription lookup error:", subError);
+    return res
+      .status(500)
+      .json({ error: "Subscription lookup failed", details: subError.message });
+  }
+  if(!subscription){
+ //If no user set create a subscription for testing. 
       const { data: newSub, error: insertError } = await supabaseAdmin
         .from("subscriptions")
         .insert([
@@ -56,7 +74,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(500).json({ error: "Failed to create subscription", details: insertError.message })
       }
 
-    
   }
 
   // Generate magic link
