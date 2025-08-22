@@ -85,3 +85,7 @@ INSERT INTO public.users (id, email, created_at)
 SELECT id, email, created_at
 FROM auth.users
 ON CONFLICT (id) DO NOTHING; 
+
+--Ensure one subscription per user
+alter table subscriptions
+add constraint subscriptions_user_id_key unique (user_id);

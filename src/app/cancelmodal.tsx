@@ -154,7 +154,7 @@ const prevStep = () => {
     try {
       await createCancellations(JSON.stringify(cancellation));
       if(!cancellation?.accepted_downsell)  await gupdateUserSubscription(JSON.stringify({ status: "pending_cancellation" }));
-      else await gupdateUserSubscription(JSON.stringify({ monthly_price: cancellation.current_price - 1000 }));
+      else await gupdateUserSubscription(JSON.stringify({ monthly_price: cancellation.current_price - 1000,  status: "active"  }));
     } catch (err) {
       console.error("Error submitting cancellation:", err);
     } finally {

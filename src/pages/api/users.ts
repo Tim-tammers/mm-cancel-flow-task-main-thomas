@@ -43,7 +43,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   //Check for a subscription
-    let { data: subscription, error: subError } = await supabase
+    let { data: subscription, error: subError } = await supabaseAdmin
     .from("subscriptions")
     .select("*")
     .eq("user_id", user.id)
